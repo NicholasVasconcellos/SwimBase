@@ -1,0 +1,24 @@
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Expo
+.expo/
+.expo-shared/
+
+# EAS
+.eas/
+eas-build/
+*.apk
+*.aab
+
+# React Native
+android/
+ios/
+
+# Environment files
+.env
+.env.*
