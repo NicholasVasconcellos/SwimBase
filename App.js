@@ -346,7 +346,7 @@ export default function App() {
                 placeholderTextColor="rgba(255,255,255,0.4)"
                 value={resultTime}
                 onChangeText={setResultTime}
-                keyboardType="decimal-pad"
+                keyboardType="default"
               />
               <Text style={styles.hint}>Enter as seconds (25.34) or mm:ss.ms (1:03.45)</Text>
             </View>
