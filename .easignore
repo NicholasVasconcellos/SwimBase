@@ -5,3 +5,6 @@ node_modules/
 *.aab
 *.log
 .git/
+package-lock.json
+yarn.lock
+.claude/
