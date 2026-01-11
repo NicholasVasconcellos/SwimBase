@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   StatusBar,
   Keyboard,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -22,6 +23,7 @@ const swimmers = [
   "Aiko",
   "Victor",
 ];
+
 const strokes = [
   "Freestyle",
   "Backstroke",
@@ -29,7 +31,9 @@ const strokes = [
   "Butterfly",
   "Individual Medley",
 ];
+
 const distances = ["50m", "100m", "200m", "400m", "800m", "1500m"];
+
 const efforts = ["60%", "70%", "80%", "90%", "100%"];
 
 const referenceTimes = {
@@ -76,6 +80,7 @@ const TypeaheadInput = ({
   onChangeText,
   options,
   placeholder,
+  zIndexValue,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState(value);
@@ -96,6 +101,11 @@ const TypeaheadInput = ({
     filteredOptions.length > 0 &&
     !options.some((opt) => opt.toLowerCase() === inputValue.toLowerCase());
 
+  // Show all options when input is empty and focused
+  const showAllOptions = isFocused && inputValue.length === 0;
+
+  const isShowingSuggestions = showSuggestions || showAllOptions;
+
   const handleSelect = (option) => {
     setInputValue(option);
     onChangeText(option);
@@ -110,11 +120,17 @@ const TypeaheadInput = ({
 
   const handleBlur = () => {
     // Delay to allow tap on suggestion
-    setTimeout(() => setIsFocused(false), 150);
+    setTimeout(() => setIsFocused(false), 200);
   };
 
   return (
-    <View style={styles.field}>
+    <View
+      style={[
+        styles.field,
+        { zIndex: zIndexValue },
+        Platform.OS === "android" && isShowingSuggestions && { elevation: 10 },
+      ]}
+    >
       <Text style={styles.label}>{label}</Text>
       <TextInput
         style={[styles.input, isFocused && styles.inputFocused]}
@@ -131,7 +147,7 @@ const TypeaheadInput = ({
         <View style={styles.suggestions}>
           <ScrollView
             style={styles.suggestionsScroll}
-            keyboardShouldPersistTaps="handled"
+            keyboardShouldPersistTaps="always"
             nestedScrollEnabled
           >
             {filteredOptions.map((option) => (
@@ -139,6 +155,7 @@ const TypeaheadInput = ({
                 key={option}
                 style={styles.suggestionItem}
                 onPress={() => handleSelect(option)}
+                activeOpacity={0.7}
               >
                 <Text style={styles.suggestionText}>
                   {/* Highlight matching part */}
@@ -163,11 +180,11 @@ const TypeaheadInput = ({
         </View>
       )}
       {/* Show all options when input is empty and focused */}
-      {isFocused && inputValue.length === 0 && (
+      {showAllOptions && (
         <View style={styles.suggestions}>
           <ScrollView
             style={styles.suggestionsScroll}
-            keyboardShouldPersistTaps="handled"
+            keyboardShouldPersistTaps="always"
             nestedScrollEnabled
           >
             {options.map((option) => (
@@ -175,6 +192,7 @@ const TypeaheadInput = ({
                 key={option}
                 style={styles.suggestionItem}
                 onPress={() => handleSelect(option)}
+                activeOpacity={0.7}
               >
                 <Text style={styles.suggestionText}>{option}</Text>
               </TouchableOpacity>
@@ -318,6 +336,7 @@ export default function App() {
 
       <ScrollView
         style={styles.content}
+        contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
         nestedScrollEnabled
       >
@@ -330,6 +349,7 @@ export default function App() {
               onChangeText={setName}
               options={swimmers}
               placeholder="Start typing name..."
+              zIndexValue={50}
             />
 
             <TypeaheadInput
@@ -338,6 +358,7 @@ export default function App() {
               onChangeText={setStroke}
               options={strokes}
               placeholder="Start typing stroke..."
+              zIndexValue={40}
             />
 
             <TypeaheadInput
@@ -346,6 +367,7 @@ export default function App() {
               onChangeText={setDistance}
               options={distances}
               placeholder="Start typing distance..."
+              zIndexValue={30}
             />
 
             <TypeaheadInput
@@ -354,10 +376,11 @@ export default function App() {
               onChangeText={setEffort}
               options={efforts}
               placeholder="Start typing effort..."
+              zIndexValue={20}
             />
 
             {/* Best Time Input */}
-            <View style={styles.field}>
+            <View style={[styles.field, { zIndex: 10 }]}>
               <Text style={styles.label}>Best Time</Text>
               <TextInput
                 style={styles.input}
@@ -373,7 +396,7 @@ export default function App() {
             </View>
 
             {/* Time Display Cards */}
-            <View style={styles.timeCards}>
+            <View style={[styles.timeCards, { zIndex: 5 }]}>
               <View style={styles.timeCard}>
                 <Text style={styles.timeLabel}>Best Time</Text>
                 <Text style={styles.timeValue}>{formatTime(bestSeconds)}</Text>
@@ -387,7 +410,7 @@ export default function App() {
             </View>
 
             {/* Buttons */}
-            <View style={styles.buttonRow}>
+            <View style={[styles.buttonRow, { zIndex: 1 }]}>
               <TouchableOpacity
                 style={styles.clearFormButton}
                 onPress={clearForm}
@@ -438,6 +461,7 @@ export default function App() {
             )}
           </View>
         )}
+
         {/* Extra padding at bottom for keyboard */}
         <View style={{ height: 100 }} />
       </ScrollView>
@@ -494,12 +518,15 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  contentContainer: {
+    // Don't use overflow: hidden here
+  },
   form: {
     padding: 16,
   },
   field: {
     marginBottom: 20,
-    zIndex: 1,
+    position: "relative",
   },
   label: {
     fontSize: 13,
@@ -533,25 +560,26 @@ const styles = StyleSheet.create({
     top: 72,
     left: 0,
     right: 0,
-    backgroundColor: "#1a3a5c",
+    backgroundColor: "#1a3a5c", // Fully opaque background
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "rgba(79,195,247,0.3)",
-    zIndex: 1000,
-    elevation: 10,
+    borderColor: "rgba(79,195,247,0.5)",
+    zIndex: 9999,
+    elevation: 20, // Higher elevation for Android
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
     overflow: "hidden",
   },
   suggestionsScroll: {
-    maxHeight: 180,
+    maxHeight: 200,
   },
   suggestionItem: {
     padding: 14,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.1)",
+    backgroundColor: "#1a3a5c", // Ensure each item has opaque background
   },
   suggestionText: {
     color: "#fff",
