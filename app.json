@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0c1929"
       },
-      "package": "com.swimcoach.timelogger"
+      "package": "com.swimcoach.timelogger",
+      "enableMultiDex": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
