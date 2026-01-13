@@ -1,19 +1,24 @@
-# Swim Time Logger - Android App
+# SwimBase - Android App
 
-A simple app for swim coaches to log swimmer times.
+A comprehensive app for swim coaches to log times, display training information, and plan workouts.
 
 ## Features
-- Select swimmer, stroke, distance, and effort level
-- Auto-calculates best time and target time
-- Logs entries with timestamps
-- Data persists locally on device
-- Clean, dark-themed UI
+
+- **Time Logging** - Log swimmer times with stroke, distance, and effort level
+- **Auto-calculations** - Best time and target time computed automatically
+- **Training Data Display** - Comprehensive view of training data and historical information
+- **Speech to Text** - Voice input for hands-free time entry
+- **External Display Support** - Connect to external displays for team viewing
+- **Training Planning** - Enter and organize training schedules
+- **Local Persistence** - Data stored securely on device
+- **Clean, dark-themed UI**
 
 ---
 
 ## 🚀 How to Build the APK
 
 ### Prerequisites
+
 1. Install Node.js (v18 or higher): https://nodejs.org/
 2. Install EAS CLI globally:
    ```bash
@@ -72,47 +77,6 @@ If you want to test before building:
    npx expo start
    ```
 3. Scan the QR code with Expo Go
-
----
-
-## 📝 Customizing
-
-### Add/Edit Swimmers
-Edit the `swimmers` array in `App.js`:
-```javascript
-const swimmers = ['Nicholas', 'Emma', 'Lucas', 'Sofia', 'Marcus', 'Aiko', 'Victor'];
-```
-
-### Add/Edit Reference Times
-Edit the `referenceTimes` object in `App.js`:
-```javascript
-const referenceTimes = {
-  'Nicholas-Freestyle-50m': 24.87,
-  // Add more...
-};
-```
-
-### Change App Name/Icon
-Edit `app.json` and replace images in the `assets` folder.
-
----
-
-## 📦 Project Structure
-
-```
-SwimTimeLogger/
-├── App.js              # Main app code
-├── app.json            # Expo configuration
-├── eas.json            # Build configuration
-├── package.json        # Dependencies
-├── babel.config.js     # Babel configuration
-├── assets/
-│   ├── icon.png        # App icon (1024x1024)
-│   ├── adaptive-icon.png
-│   ├── splash.png      # Splash screen
-│   └── favicon.png
-└── README.md           # This file
-```
 
 ---
 
