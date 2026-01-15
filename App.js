@@ -14,15 +14,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const swimmers = [
-  "Nicholas",
-  "Emma",
-  "Lucas",
-  "Sofia",
-  "Marcus",
-  "Aiko",
-  "Victor",
-];
+const swimmers = [];
 
 const strokes = [
   "Freestyle",
@@ -34,25 +26,9 @@ const strokes = [
 
 const distances = ["50m", "100m", "200m", "400m", "800m", "1500m"];
 
-const efforts = ["60%", "70%", "80%", "90%", "100%"];
+const efforts = ["50%", "60%", "70%", "80%", "90%", "100%"];
 
-const referenceTimes = {
-  "Nicholas-Freestyle-50m": 24.87,
-  "Nicholas-Backstroke-100m": 58.32,
-  "Nicholas-Breaststroke-200m": 148.45,
-  "Emma-Freestyle-100m": 53.21,
-  "Emma-Backstroke-200m": 132.88,
-  "Lucas-Breaststroke-100m": 63.45,
-  "Lucas-Butterfly-50m": 25.34,
-  "Sofia-Freestyle-200m": 118.76,
-  "Sofia-Individual Medley-400m": 282.33,
-  "Marcus-Backstroke-50m": 27.15,
-  "Marcus-Freestyle-400m": 245.22,
-  "Aiko-Butterfly-200m": 128.91,
-  "Aiko-Breaststroke-50m": 32.18,
-  "Victor-Butterfly-100m": 55.67,
-  "Victor-Individual Medley-200m": 125.12,
-};
+const referenceTimes = {};
 
 const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return "--";
@@ -241,7 +217,7 @@ export default function App() {
   const bestSeconds = parseTimeInput(bestTimeInput);
   const resultSeconds =
     bestSeconds != null && !isNaN(bestSeconds)
-      ? bestSeconds * effortPercent
+      ? bestSeconds + bestSeconds * (1 - effortPercent)
       : null;
 
   const handleLog = () => {
@@ -260,7 +236,7 @@ export default function App() {
     }
 
     const effortPercent = (parseInt(effort) || 80) / 100;
-    const resultSeconds = bestSeconds * effortPercent;
+    const resultSeconds = bestSeconds + bestSeconds * (1 - effortPercent);
 
     const newEntry = {
       id: Date.now(),
