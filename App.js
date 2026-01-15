@@ -34,10 +34,10 @@ const formatTime = (seconds) => {
   if (!seconds || isNaN(seconds)) return "--";
   if (seconds >= 60) {
     const mins = Math.floor(seconds / 60);
-    const secs = (seconds % 60).toFixed(2);
-    return `${mins}:${secs.padStart(5, "0")}`;
+    const secs = (seconds % 60).toFixed(3);
+    return `${mins}:${secs.padStart(6, "0")}`;
   }
-  return seconds.toFixed(2);
+  return seconds.toFixed(3);
 };
 
 const parseTimeInput = (input) => {
@@ -230,7 +230,7 @@ export default function App() {
     if (bestSeconds == null || isNaN(bestSeconds)) {
       Alert.alert(
         "Invalid Best Time",
-        "Please enter a valid time (e.g., 25.34 or 1:03.45)"
+        "Please enter a valid time (e.g., 25.340 or 1:03.450)"
       );
       return;
     }
@@ -360,7 +360,7 @@ export default function App() {
               <Text style={styles.label}>Best Time</Text>
               <TextInput
                 style={styles.input}
-                placeholder="e.g. 25.34 or 1:03.45"
+                placeholder="e.g. 25.340 or 1:03.450"
                 placeholderTextColor="rgba(255,255,255,0.4)"
                 value={bestTimeInput}
                 onChangeText={setBestTimeInput}
