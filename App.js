@@ -213,6 +213,8 @@ export default function App() {
       const saved = await AsyncStorage.getItem("swimEntries");
       if (saved) {
         setEntries(JSON.parse(saved));
+      } else {
+        setEntries([]);
       }
     } catch (error) {
       console.log("Error loading entries:", error);
@@ -253,18 +255,26 @@ export default function App() {
       ? bestSeconds + bestSeconds * (1 - effortPercent)
       : null;
 
-  const handleLog = () => {
+  const handleLog = async () => {
     if (!name || !stroke || !distance || !bestTimeInput) {
-      Alert.alert("Missing Fields", "Please fill in all fields");
+      if (Platform.OS === 'web') {
+        window.alert("Please fill in all fields");
+      } else {
+        Alert.alert("Missing Fields", "Please fill in all fields");
+      }
       return;
     }
 
     const bestSeconds = parseTimeInput(bestTimeInput);
     if (bestSeconds == null || isNaN(bestSeconds)) {
-      Alert.alert(
-        "Invalid Best Time",
-        "Please enter a valid time (e.g., 25.340 or 1:03.450)"
-      );
+      if (Platform.OS === 'web') {
+        window.alert("Please enter a valid time (e.g., 25.340 or 1:03.450)");
+      } else {
+        Alert.alert(
+          "Invalid Best Time",
+          "Please enter a valid time (e.g., 25.340 or 1:03.450)"
+        );
+      }
       return;
     }
 
@@ -286,23 +296,53 @@ export default function App() {
 
     const newEntries = [newEntry, ...entries];
     setEntries(newEntries);
-    saveEntries(newEntries);
+    await saveEntries(newEntries);
     setBestTimeInput("");
-    Alert.alert("Success", "Entry logged!");
+
+    if (Platform.OS === 'web') {
+      window.alert("Entry logged!");
+    } else {
+      Alert.alert("Success", "Entry logged!");
+    }
   };
 
-  const clearLog = () => {
-    Alert.alert("Clear Log", "Are you sure you want to delete all entries?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete All",
-        style: "destructive",
-        onPress: () => {
+  const clearLog = async () => {
+    // Handle web platform differently since Alert.alert doesn't work on web
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm("Are you sure you want to delete all entries?");
+      if (confirmed) {
+        try {
           setEntries([]);
-          saveEntries([]);
-        },
-      },
-    ]);
+          await saveEntries([]);
+          window.alert("All entries cleared!");
+        } catch (error) {
+          window.alert("Failed to clear entries: " + error.message);
+        }
+      }
+    } else {
+      // Native platforms use Alert.alert
+      Alert.alert(
+        "Clear Log",
+        "Are you sure you want to delete all entries?",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Delete All",
+            style: "destructive",
+            onPress: async () => {
+              try {
+                setEntries([]);
+                await saveEntries([]);
+                Alert.alert("Success", "All entries cleared!");
+              } catch (error) {
+                Alert.alert("Error", "Failed to clear entries: " + error.message);
+              }
+            },
+          },
+        ],
+        { cancelable: true }
+      );
+    }
   };
 
   const clearForm = () => {
@@ -503,7 +543,11 @@ export default function App() {
                     </View>
                   </View>
                 ))}
-                <TouchableOpacity style={styles.clearButton} onPress={clearLog}>
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={clearLog}
+                  activeOpacity={0.7}
+                >
                   <Text style={styles.clearButtonText}>🗑️ Clear Log</Text>
                 </TouchableOpacity>
               </>
