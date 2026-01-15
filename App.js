@@ -24,7 +24,8 @@ const strokes = [
   "Individual Medley",
 ];
 
-const distances = ["50m", "100m", "200m", "400m", "800m", "1500m"];
+const distancesMeters = ["50", "100", "200", "400", "800", "1500"];
+const distancesYards = ["25", "50", "100", "200", "500", "1000", "1650"];
 
 const efforts = ["50%", "60%", "70%", "80%", "90%", "100%"];
 
@@ -47,6 +48,12 @@ const parseTimeInput = (input) => {
     return parseFloat(mins) * 60 + parseFloat(secs);
   }
   return parseFloat(input);
+};
+
+// Helper to extract numeric distance value (strips 'm' or 'y' suffix)
+const getDistanceValue = (distance) => {
+  if (!distance) return distance;
+  return distance.toString().replace(/[my]$/i, "");
 };
 
 // Typeahead Input Component
@@ -188,11 +195,18 @@ export default function App() {
   const [bestTimeInput, setBestTimeInput] = useState("");
   const [entries, setEntries] = useState([]);
   const [showLog, setShowLog] = useState(false);
+  const [unit, setUnit] = useState("m"); // 'm' for meters, 'y' for yards
 
-  // Load saved entries on app start
+  // Load saved entries and preferences on app start
   useEffect(() => {
     loadEntries();
+    loadUnit();
   }, []);
+
+  // Save unit preference when it changes
+  useEffect(() => {
+    saveUnit(unit);
+  }, [unit]);
 
   const loadEntries = async () => {
     try {
@@ -210,6 +224,25 @@ export default function App() {
       await AsyncStorage.setItem("swimEntries", JSON.stringify(newEntries));
     } catch (error) {
       console.log("Error saving entries:", error);
+    }
+  };
+
+  const loadUnit = async () => {
+    try {
+      const saved = await AsyncStorage.getItem("unitPreference");
+      if (saved) {
+        setUnit(saved);
+      }
+    } catch (error) {
+      console.log("Error loading unit preference:", error);
+    }
+  };
+
+  const saveUnit = async (unitValue) => {
+    try {
+      await AsyncStorage.setItem("unitPreference", unitValue);
+    } catch (error) {
+      console.log("Error saving unit preference:", error);
     }
   };
 
@@ -337,11 +370,50 @@ export default function App() {
               zIndexValue={40}
             />
 
+            {/* Unit Toggle */}
+            <View style={[styles.field, { zIndex: 35 }]}>
+              <Text style={styles.label}>Distance Unit</Text>
+              <View style={styles.unitToggle}>
+                <TouchableOpacity
+                  style={[
+                    styles.unitButton,
+                    unit === "m" && styles.unitButtonActive,
+                  ]}
+                  onPress={() => setUnit("m")}
+                >
+                  <Text
+                    style={[
+                      styles.unitButtonText,
+                      unit === "m" && styles.unitButtonTextActive,
+                    ]}
+                  >
+                    Meters
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.unitButton,
+                    unit === "y" && styles.unitButtonActive,
+                  ]}
+                  onPress={() => setUnit("y")}
+                >
+                  <Text
+                    style={[
+                      styles.unitButtonText,
+                      unit === "y" && styles.unitButtonTextActive,
+                    ]}
+                  >
+                    Yards
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
             <TypeaheadInput
               label="Distance"
               value={distance}
               onChangeText={setDistance}
-              options={distances}
+              options={unit === "m" ? distancesMeters : distancesYards}
               placeholder="Start typing distance..."
               zIndexValue={30}
             />
@@ -418,7 +490,8 @@ export default function App() {
                       <Text style={styles.entryResult}>{entry.resultTime}</Text>
                     </View>
                     <Text style={styles.entryEvent}>
-                      {entry.distance} {entry.stroke} @ {entry.effort}
+                      {getDistanceValue(entry.distance)}{unit} {entry.stroke} @{" "}
+                      {entry.effort}
                     </Text>
                     <View style={styles.entryFooter}>
                       <Text style={styles.entryTimestamp}>
@@ -525,6 +598,31 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: "#4fc3f7",
     backgroundColor: "rgba(79,195,247,0.1)",
+  },
+  unitToggle: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  unitButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.15)",
+    backgroundColor: "rgba(255,255,255,0.08)",
+    alignItems: "center",
+  },
+  unitButtonActive: {
+    borderColor: "#4fc3f7",
+    backgroundColor: "rgba(79,195,247,0.2)",
+  },
+  unitButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "rgba(255,255,255,0.6)",
+  },
+  unitButtonTextActive: {
+    color: "#4fc3f7",
   },
   hint: {
     fontSize: 12,
