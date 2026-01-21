@@ -2,6 +2,24 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing, radii } from "../../styles/theme";
 
+
+// Default Styles for button (regardless of type)
+// Create a react native stylehseet object (validated and mapped to id)
+// SEt default style for Button adn Text in the button component
+const styles = StyleSheet.create({
+  button: {
+    padding: spacing.xl - 2,
+    borderRadius: radii.lg,
+    alignItems: "center",
+  },
+  text: {
+    color: colors.text,
+  },
+});
+
+
+// Style for each type of button (primary, secondary, danger)
+// Object with a list of themes, each with style properties for button and text
 const VARIANTS = {
   primary: {
     button: {
@@ -39,39 +57,39 @@ const VARIANTS = {
   },
 };
 
+// Create functional based button compoenent
 export const Button = ({
   title,
   onPress,
   variant = "primary",
   style,
   textStyle,
-  flex,
+  flex, // in react native, flex is flex-grow
 }) => {
+  // Get the specific varaint style, if not existing set to primary (short circuiting sytnax)
   const variantStyles = VARIANTS[variant] || VARIANTS.primary;
 
+
+  // Return the compoenent 
   return (
     <TouchableOpacity
+      // set the style property: apply all the styles listed in the array, left to right
+      // later ones will overrid
       style={[
-        styles.button,
-        variantStyles.button,
-        flex && { flex },
-        style,
+        styles.button, // Default Button Styles
+        variantStyles.button, // Variant Specific Button Styles
+        flex && { flex }, // flex only if flex is "truthy" (not null) (short circuiting)
+        style, // Style passed in to the button component
       ]}
-      onPress={onPress}
-      activeOpacity={0.7}
+      onPress={onPress} // set the OnPress callback function to the one passed in at the button component
+      activeOpacity={0.7} // Set the TouchableOpacity compoene'ts property
     >
-      <Text style={[styles.text, variantStyles.text, textStyle]}>{title}</Text>
+      <Text style={
+        // Send the default text style, the variant style and the one passed in at the button
+        // text style from styles agrument, variant's text style, textStyle argument
+        [styles.text, variantStyles.text, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    padding: spacing.xl - 2,
-    borderRadius: radii.lg,
-    alignItems: "center",
-  },
-  text: {
-    color: colors.text,
-  },
-});
+

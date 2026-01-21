@@ -1,0 +1,19 @@
+styles.button
+
+Button Explained
+
+Create a function called Button
+Define it with arrow syntax
+the argument is an object, that will have the properties
+the html compoenent would use
+
+use a destructurign syntax to map them to local variables
+
+export const Button = ()=>{}
+
+on the argument it's an object with properties
+{title, onPress, varient = "primary"}
+
+this means from the passed in argument obj, get the title, get the onPress,
+get variant, and if one is not provided set it as "primary" as a default value
+
