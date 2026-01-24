@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Swim Time Logger",
-    "slug": "swim-time-logger",
+    "name": "My Neptune",
+    "slug": "my-neptune",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,15 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.swimcoach.timelogger"
+      "bundleIdentifier": "com.swimcoach.myneptune"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0c1929"
       },
-      "package": "com.swimcoach.timelogger",
-      "enableMultiDex": true
+      "package": "com.swimcoach.myneptune"
     },
     "web": {
       "favicon": "./assets/favicon.png"

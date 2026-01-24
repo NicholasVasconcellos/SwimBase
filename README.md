@@ -1,4 +1,4 @@
-# SwimBase - Android App
+# My Neptune
 
 A comprehensive app for swim coaches to log times, display training information, and plan workouts.
 

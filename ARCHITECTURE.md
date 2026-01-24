@@ -1,4 +1,4 @@
-# SwimTimeLogger Architecture
+# My Neptune Architecture
 
 ## Overview
 

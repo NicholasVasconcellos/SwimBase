@@ -1,5 +1,5 @@
 {
-  "name": "swim-time-logger",
+  "name": "my-neptune",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -10,14 +10,14 @@
     "build:android": "eas build -p android --profile preview"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~3.1.3",
-    "@react-native-async-storage/async-storage": "1.21.0",
-    "expo": "~50.0.0",
-    "expo-status-bar": "~1.11.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.73.6",
-    "react-native-web": "~0.19.6"
+    "@expo/metro-runtime": "~6.1.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "expo": "^54.0.0",
+    "expo-status-bar": "~3.0.9",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-web": "^0.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
