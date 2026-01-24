@@ -9,7 +9,13 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
-import { colors, typography, spacing, radii, shadows } from "../../styles/theme";
+import {
+  colors,
+  typography,
+  spacing,
+  radii,
+  shadows,
+} from "../../styles/theme";
 
 export const TypeaheadInput = ({
   label,
@@ -19,19 +25,25 @@ export const TypeaheadInput = ({
   placeholder,
   zIndexValue,
 }) => {
+  // Bool is focused for when the input text field is active (opposite is blurred)
   const [isFocused, setIsFocused] = useState(false);
+  // Track what is displayed on the component
+  // onChangeText callback updates parent 
   const [inputValue, setInputValue] = useState(value);
 
+  // if Value changes update "InputValue"
   useEffect(() => {
     setInputValue(value);
   }, [value]);
 
   // Filter options based on input
+  // array.filter((element) => condition)
   const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(inputValue.toLowerCase())
+    option.toLowerCase().includes(inputValue.toLowerCase()),
   );
 
-  // Show suggestions when focused and there's input or options to show
+  // focused = text box is active
+  // Bool showsuggestions, when it's focused and theres input
   const showSuggestions =
     isFocused &&
     inputValue.length > 0 &&
@@ -39,6 +51,7 @@ export const TypeaheadInput = ({
     !options.some((opt) => opt.toLowerCase() === inputValue.toLowerCase());
 
   // Show all options when input is empty and focused
+  // Bool show All Options : when it's focused and no input yet
   const showAllOptions = isFocused && inputValue.length === 0;
 
   const isShowingSuggestions = showSuggestions || showAllOptions;
@@ -50,6 +63,10 @@ export const TypeaheadInput = ({
     Keyboard.dismiss();
   };
 
+  // Call back function of Text Input when text changes
+  // Updates the InputValue
+  // calls the parent's (typeahedForm) callback function to propagate the signal
+
   const handleChangeText = (text) => {
     setInputValue(text);
     onChangeText(text);
@@ -60,6 +77,18 @@ export const TypeaheadInput = ({
     setTimeout(() => setIsFocused(false), 200);
   };
 
+  // to render the suggested item, get the option (input text)
+  // if filtered = true if there is some text
+  // Option = one of the dropdown options
+
+  // split the option on the matching input with gi, aka anywhere and case insensitive
+  //
+
+  /*
+
+  
+  
+  */
   const renderSuggestionItem = (option, isFiltered = false) => (
     <TouchableOpacity
       key={option}
@@ -69,20 +98,18 @@ export const TypeaheadInput = ({
     >
       {isFiltered ? (
         <Text style={styles.suggestionText}>
-          {option
-            .split(new RegExp(`(${inputValue})`, "gi"))
-            .map((part, i) => (
-              <Text
-                key={i}
-                style={
-                  part.toLowerCase() === inputValue.toLowerCase()
-                    ? styles.suggestionHighlight
-                    : null
-                }
-              >
-                {part}
-              </Text>
-            ))}
+          {option.split(new RegExp(`(${inputValue})`, "gi")).map((part, i) => (
+            <Text
+              key={i}
+              style={
+                part.toLowerCase() === inputValue.toLowerCase()
+                  ? styles.suggestionHighlight
+                  : null
+              }
+            >
+              {part}
+            </Text>
+          ))}
         </Text>
       ) : (
         <Text style={styles.suggestionText}>{option}</Text>
@@ -100,6 +127,7 @@ export const TypeaheadInput = ({
     >
       <Text style={styles.label}>{label}</Text>
       <TextInput
+        // if isFocused use the inputfocused style (short circuit syntax)
         style={[styles.input, isFocused && styles.inputFocused]}
         value={inputValue}
         onChangeText={handleChangeText}
@@ -110,15 +138,19 @@ export const TypeaheadInput = ({
         autoCapitalize="words"
         autoCorrect={false}
       />
+      {/* Short circuit syntax for conditional rendering */}
       {showSuggestions && (
         <View style={styles.suggestions}>
           <ScrollView
             style={styles.suggestionsScroll}
+            // Even when keyboard is open, register taps on other things
+            // By default tapping outside dismissed the keyboard and ignores the tap
             keyboardShouldPersistTaps="always"
+            // scroll is applied only to inner element
             nestedScrollEnabled
           >
             {filteredOptions.map((option) =>
-              renderSuggestionItem(option, true)
+              renderSuggestionItem(option, true),
             )}
           </ScrollView>
         </View>

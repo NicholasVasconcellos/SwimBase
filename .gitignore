@@ -22,3 +22,6 @@ ios/
 # Environment files
 .env
 .env.*
+
+#Notes
+notes.txt
