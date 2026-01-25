@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView, StatusBar, ScrollView, StyleSheet, View } from "react-native";
+import { StatusBar, ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "./src/styles/theme";
 import { useEntries } from "./src/hooks/useEntries";
 import { useUnitPreference } from "./src/hooks/useUnitPreference";
@@ -14,33 +15,35 @@ export default function App() {
   const { unit, setUnit } = useUnitPreference();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.background} />
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.background} />
 
-      <Header />
+        <Header />
 
-      <TabNavigation
-        showLog={showLog}
-        setShowLog={setShowLog}
-        entryCount={entryCount}
-      />
+        <TabNavigation
+          showLog={showLog}
+          setShowLog={setShowLog}
+          entryCount={entryCount}
+        />
 
-      <ScrollView
-        style={styles.content}
-        contentContainerStyle={styles.contentContainer}
-        keyboardShouldPersistTaps="handled"
-        nestedScrollEnabled
-      >
-        {!showLog ? (
-          <EntryForm unit={unit} setUnit={setUnit} onSubmit={addEntry} />
-        ) : (
-          <LogView entries={entries} unit={unit} onClearLog={clearEntries} />
-        )}
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
+          nestedScrollEnabled
+        >
+          {!showLog ? (
+            <EntryForm unit={unit} setUnit={setUnit} onSubmit={addEntry} />
+          ) : (
+            <LogView entries={entries} unit={unit} onClearLog={clearEntries} />
+          )}
 
-        {/* Extra padding at bottom for keyboard */}
-        <View style={styles.bottomPadding} />
-      </ScrollView>
-    </SafeAreaView>
+          {/* Extra padding at bottom for keyboard */}
+          <View style={styles.bottomPadding} />
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
