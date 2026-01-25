@@ -8,22 +8,26 @@ const STORAGE_KEY = "unitPreference";
  * @returns {Object} Unit state and setter
  */
 export const useUnitPreference = () => {
+  // Create 2 variables with state Hook
   const [unit, setUnit] = useState("m"); // 'm' for meters, 'y' for yards
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load unit preference on mount
+  // Use Effect Hook: run once on Mount, to load the unit
   useEffect(() => {
     loadUnit();
   }, []);
 
-  // Save unit when it changes
+  // Trigger reload When unit changes or loading changes, set the new value to storage
   useEffect(() => {
     if (!isLoading) {
       saveUnit(unit);
     }
   }, [unit, isLoading]);
 
+
+  // Loads and calls setUnit to update, else error
   const loadUnit = async () => {
+    // try to laod from storage
     try {
       const saved = await AsyncStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -32,10 +36,12 @@ export const useUnitPreference = () => {
     } catch (error) {
       console.log("Error loading unit preference:", error);
     } finally {
+      // Once complete set Finished loading
       setIsLoading(false);
     }
   };
 
+  // Save Unit to storage
   const saveUnit = async (unitValue) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, unitValue);
@@ -44,6 +50,7 @@ export const useUnitPreference = () => {
     }
   };
 
+  // Return the unit, the setter, and the booleans
   return {
     unit,
     setUnit,
