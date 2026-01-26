@@ -39,7 +39,7 @@ const VARIANTS = {
     },
     text: {
       color: colors.textSecondary,
-      fontSize: typography.sizes.lg,
+      fontSize: typography.sizes.l,
       fontWeight: typography.weights.semibold,
     },
   },

@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderLight,
     backgroundColor: colors.backgroundInput,
     color: colors.text,
-    fontSize: typography.sizes.lg,
+    fontSize: typography.sizes.l,
     fontWeight: typography.weights.medium,
   },
   hint: {

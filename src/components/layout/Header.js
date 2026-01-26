@@ -17,7 +17,7 @@ export const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: spacing.xl,
+    paddingVertical: spacing.l,
     paddingHorizontal: spacing.xl,
     alignItems: "center",
     borderBottomWidth: 1,
@@ -25,11 +25,12 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     fontSize: typography.sizes.giant,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   title: {
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
     color: colors.primary,
+    marginBottom: spacing.xs,
   },
 });

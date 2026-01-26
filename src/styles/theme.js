@@ -51,11 +51,11 @@ export const typography = {
     xs: 12,
     sm: 13,
     md: 14,
-    lg: 16,
+    l: 16,
     xl: 18,
     xxl: 24,
     giant: 48,
-    huge: 64,
+    veryGiant: 64,
   },
 
   // Font weights

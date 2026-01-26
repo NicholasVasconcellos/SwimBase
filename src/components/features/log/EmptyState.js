@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   emptyIcon: {
-    fontSize: typography.sizes.huge,
+    fontSize: typography.sizes.veryGiant,
     marginBottom: spacing.lg,
     opacity: 0.5,
   },
