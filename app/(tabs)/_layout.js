@@ -3,12 +3,25 @@ import { View, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing, radii } from "../../src/styles/theme";
 import { useEntriesContext } from "../../src/context";
 
+/**
+ * Renders a tab label with active/inactive styling
+ * @param {Object} props - Component props
+ * @param {string} props.label - Tab label text
+ * @param {boolean} props.focused - Whether tab is currently selected
+ * @returns {JSX.Element} The tab label
+ */
 const TabIcon = ({ label, focused }) => (
   <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>
     {label}
   </Text>
 );
 
+/**
+ * Displays a count badge, hidden when count is zero
+ * @param {Object} props - Component props
+ * @param {number} props.count - Number to display in badge
+ * @returns {JSX.Element|null} The badge or null if count is zero
+ */
 const Badge = ({ count }) => {
   if (count === 0) return null;
   return (
@@ -18,6 +31,10 @@ const Badge = ({ count }) => {
   );
 };
 
+/**
+ * Main tab navigation layout with New Entry, Log, and My Screen tabs
+ * @returns {JSX.Element} The tab navigation component
+ */
 export default function TabLayout() {
   const { entryCount } = useEntriesContext();
 

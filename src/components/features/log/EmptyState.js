@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing } from "../../../styles/theme";
 
+/**
+ * Displays a placeholder message when no swim entries exist
+ * @returns {JSX.Element} The empty state component
+ */
 export const EmptyState = () => {
   return (
     <View style={styles.emptyState}>

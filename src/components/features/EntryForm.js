@@ -14,6 +14,14 @@ import { TimeCard } from "../common/TimeCard";
 import { Button } from "../common/Button";
 import { UnitToggle } from "./UnitToggle";
 
+/**
+ * Form for logging new swim entries with swimmer, stroke, distance, and time
+ * @param {Object} props - Component props
+ * @param {string} props.unit - Distance unit ('m' or 'y')
+ * @param {Function} props.setUnit - Unit setter callback
+ * @param {Function} props.onSubmit - Form submission handler
+ * @returns {JSX.Element} The entry form component
+ */
 export const EntryForm = ({ unit, setUnit, onSubmit }) => {
   const [name, setName] = useState("");
   const [stroke, setStroke] = useState("");
@@ -26,6 +34,9 @@ export const EntryForm = ({ unit, setUnit, onSubmit }) => {
   const bestSeconds = parseTimeInput(bestTimeInput);
   const resultSeconds = calculateResultTime(bestSeconds, effortPercent);
 
+  /**
+   * Validates and submits the form, clears time input on success
+   */
   const handleLog = async () => {
     const success = await onSubmit({
       name,
@@ -40,6 +51,9 @@ export const EntryForm = ({ unit, setUnit, onSubmit }) => {
     }
   };
 
+  /**
+   * Resets all form fields to default values
+   */
   const clearForm = () => {
     setName("");
     setStroke("");

@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing } from "../../styles/theme";
 
+/**
+ * App header displaying the swimming icon and app title
+ * @returns {JSX.Element} The header component
+ */
 export const Header = () => {
   return (
     <View style={styles.header}>

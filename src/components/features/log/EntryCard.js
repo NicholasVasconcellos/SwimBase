@@ -3,6 +3,13 @@ import { View, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing, radii } from "../../../styles/theme";
 import { getDistanceValue } from "../../../utils/distanceUtils";
 
+/**
+ * Renders a single swim entry with name, times, and event details
+ * @param {Object} props - Component props
+ * @param {Object} props.entry - Swim entry data
+ * @param {string} props.unit - Distance unit for display
+ * @returns {JSX.Element} The entry card component
+ */
 export const EntryCard = ({ entry, unit }) => {
   return (
     <View style={styles.entryCard}>

@@ -18,6 +18,9 @@ export const useEntries = () => {
     loadEntries();
   }, []);
 
+  /**
+   * Loads saved entries from AsyncStorage into state
+   */
   const loadEntries = async () => {
     try {
       const saved = await AsyncStorage.getItem(STORAGE_KEY);
@@ -33,6 +36,10 @@ export const useEntries = () => {
     }
   };
 
+  /**
+   * Persists entries array to AsyncStorage
+   * @param {Array} newEntries - Entries to save
+   */
   const saveEntries = async (newEntries) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newEntries));
@@ -41,6 +48,16 @@ export const useEntries = () => {
     }
   };
 
+  /**
+   * Creates and saves a new swim entry after validation
+   * @param {Object} entryData - Entry form data
+   * @param {string} entryData.name - Swimmer name
+   * @param {string} entryData.stroke - Stroke type
+   * @param {string} entryData.distance - Distance value
+   * @param {string} entryData.effort - Effort percentage
+   * @param {string} entryData.bestTimeInput - Best time input string
+   * @returns {Promise<boolean>} True if entry was added successfully
+   */
   const addEntry = useCallback(
     async ({ name, stroke, distance, effort, bestTimeInput }) => {
       // Validation
@@ -97,6 +114,9 @@ export const useEntries = () => {
     [entries]
   );
 
+  /**
+   * Deletes all entries after user confirmation
+   */
   const clearEntries = useCallback(async () => {
     if (Platform.OS === "web") {
       const confirmed = window.confirm(

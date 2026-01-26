@@ -3,6 +3,12 @@ import { useEntries } from "../hooks/useEntries";
 
 const EntriesContext = createContext(null);
 
+/**
+ * Context provider that manages swim entries state throughout the app
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components
+ * @returns {JSX.Element} The context provider
+ */
 export const EntriesProvider = ({ children }) => {
   const entriesState = useEntries();
 
@@ -13,6 +19,11 @@ export const EntriesProvider = ({ children }) => {
   );
 };
 
+/**
+ * Hook to access entries context for reading and modifying swim entries
+ * @returns {Object} Entries state and operations
+ * @throws {Error} If used outside of EntriesProvider
+ */
 export const useEntriesContext = () => {
   const context = useContext(EntriesContext);
   if (!context) {

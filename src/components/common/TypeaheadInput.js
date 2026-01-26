@@ -17,6 +17,17 @@ import {
   shadows,
 } from "../../styles/theme";
 
+/**
+ * Text input with autocomplete dropdown suggestions
+ * @param {Object} props - Component props
+ * @param {string} props.label - Input field label
+ * @param {string} props.value - Current input value
+ * @param {Function} props.onChangeText - Text change handler
+ * @param {string[]} props.options - Available autocomplete options
+ * @param {string} props.placeholder - Placeholder text
+ * @param {number} props.zIndexValue - Z-index for dropdown layering
+ * @returns {JSX.Element} The typeahead input component
+ */
 export const TypeaheadInput = ({
   label,
   value,
@@ -56,6 +67,10 @@ export const TypeaheadInput = ({
 
   const isShowingSuggestions = showSuggestions || showAllOptions;
 
+  /**
+   * Selects an option and closes the dropdown
+   * @param {string} option - Selected option text
+   */
   const handleSelect = (option) => {
     setInputValue(option);
     onChangeText(option);
@@ -63,32 +78,29 @@ export const TypeaheadInput = ({
     Keyboard.dismiss();
   };
 
-  // Call back function of Text Input when text changes
-  // Updates the InputValue
-  // calls the parent's (typeahedForm) callback function to propagate the signal
-
+  /**
+   * Updates input value and notifies parent of text change
+   * @param {string} text - New input text
+   */
   const handleChangeText = (text) => {
     setInputValue(text);
     onChangeText(text);
   };
 
+  /**
+   * Handles input blur with delay to allow suggestion taps
+   */
   const handleBlur = () => {
     // Delay to allow tap on suggestion
     setTimeout(() => setIsFocused(false), 200);
   };
 
-  // to render the suggested item, get the option (input text)
-  // if filtered = true if there is some text
-  // Option = one of the dropdown options
-
-  // split the option on the matching input with gi, aka anywhere and case insensitive
-  //
-
-  /*
-
-  
-  
-  */
+  /**
+   * Renders a single suggestion item with optional text highlighting
+   * @param {string} option - Suggestion text
+   * @param {boolean} [isFiltered=false] - Whether to highlight matching text
+   * @returns {JSX.Element} The suggestion item
+   */
   const renderSuggestionItem = (option, isFiltered = false) => (
     <TouchableOpacity
       key={option}

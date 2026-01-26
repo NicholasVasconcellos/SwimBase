@@ -57,7 +57,17 @@ const VARIANTS = {
   },
 };
 
-// Create functional based button compoenent
+/**
+ * Reusable button with primary, secondary, and danger variants
+ * @param {Object} props - Component props
+ * @param {string} props.title - Button text
+ * @param {Function} props.onPress - Press handler callback
+ * @param {string} [props.variant='primary'] - Button style variant
+ * @param {Object} [props.style] - Additional button styles
+ * @param {Object} [props.textStyle] - Additional text styles
+ * @param {number} [props.flex] - Flex grow value
+ * @returns {JSX.Element} The button component
+ */
 export const Button = ({
   title,
   onPress,

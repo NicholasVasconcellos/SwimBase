@@ -25,7 +25,9 @@ export const useUnitPreference = () => {
   }, [unit, isLoading]);
 
 
-  // Loads and calls setUnit to update, else error
+  /**
+   * Loads saved unit preference from AsyncStorage into state
+   */
   const loadUnit = async () => {
     // try to laod from storage
     try {
@@ -41,7 +43,10 @@ export const useUnitPreference = () => {
     }
   };
 
-  // Save Unit to storage
+  /**
+   * Persists unit preference to AsyncStorage
+   * @param {string} unitValue - Unit to save ('m' or 'y')
+   */
   const saveUnit = async (unitValue) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, unitValue);

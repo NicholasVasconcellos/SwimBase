@@ -2,6 +2,14 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { colors, typography, spacing, radii } from "../../styles/theme";
 
+/**
+ * Toggle button for switching between meters and yards
+ * @param {Object} props - Component props
+ * @param {string} props.unit - Current unit ('m' or 'y')
+ * @param {Function} props.setUnit - Unit setter callback
+ * @param {number} [props.zIndexValue=35] - Z-index for layering
+ * @returns {JSX.Element} The unit toggle component
+ */
 export const UnitToggle = ({ unit, setUnit, zIndexValue = 35 }) => {
   return (
     <View style={[styles.field, { zIndex: zIndexValue }]}>

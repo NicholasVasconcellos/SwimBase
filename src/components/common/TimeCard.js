@@ -2,6 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing, radii } from "../../styles/theme";
 
+/**
+ * Displays a labeled time value in a styled card
+ * @param {Object} props - Component props
+ * @param {string} props.label - Card header text
+ * @param {string} props.value - Time value to display
+ * @returns {JSX.Element} The time card component
+ */
 export const TimeCard = ({ label, value }) => {
   return (
     <View style={styles.timeCard}>
