@@ -2,6 +2,7 @@
   "expo": {
     "name": "My Neptune",
     "slug": "my-neptune",
+    "scheme": "my-neptune",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -32,6 +33,9 @@
       "eas": {
         "projectId": "77f78149-57de-4461-8f9a-0e51e17162b7"
       }
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
