@@ -1,0 +1,47 @@
+  Created Files                                                                                                                                                 
+                                                                                                                                                                
+  Services:                                                                                                                                                     
+  - src/services/storage.js - STORAGE_KEYS, loadEntities, saveEntities, generateId                                                                              
+  - src/services/migration.js - Legacy data migration                                                                                                           
+  - src/services/index.js - Barrel export                                                                                                                       
+                                                                                                                                                                
+  Hooks:                                                                                                                                                        
+  - src/hooks/useEntityStore.js - Factory hook with CRUD                                                                                                        
+  - src/hooks/useTeams.js                                                                                                                                       
+  - src/hooks/useGroups.js                                                                                                                                      
+  - src/hooks/useStrokes.js (seeds 5 default strokes)                                                                                                           
+  - src/hooks/useSwimmers.js                                                                                                                                    
+  - src/hooks/useTimes.js                                                                                                                                       
+  - src/hooks/useTrainings.js                                                                                                                                   
+                                                                                                                                                                
+  Context:                                                                                                                                                      
+  - src/context/DataContext.js - Composes all entity hooks                                                                                                      
+                                                                                                                                                                
+  Components:                                                                                                                                                   
+  - src/components/common/MultiSelectTypeahead.js                                                                                                               
+  - src/components/features/EntityTypeSelector.js                                                                                                               
+  - src/components/features/forms/TeamForm.js                                                                                                                   
+  - src/components/features/forms/GroupForm.js                                                                                                                  
+  - src/components/features/forms/StrokeForm.js                                                                                                                 
+  - src/components/features/forms/SwimmerForm.js                                                                                                                
+  - src/components/features/forms/TimeForm.js                                                                                                                   
+  - src/components/features/forms/TrainingForm.js                                                                                                               
+  - src/components/features/forms/ExerciseForm.js                                                                                                               
+                                                                                                                                                                
+  Screens:                                                                                                                                                      
+  - app/(tabs)/manage.js - New Manage tab                                                                                                                       
+                                                                                                                                                                
+  Modified Files                                                                                                                                                
+                                                                                                                                                                
+  - src/components/common/TypeaheadInput.js - Added objectOptions support                                                                                       
+  - src/context/AppProvider.js - Swapped EntriesProvider → DataProvider                                                                                         
+  - app/(tabs)/_layout.js - Added Manage tab, uses DataContext                                                                                                  
+  - app/(tabs)/index.js - Uses TimeForm with DataContext                                                                                                        
+  - app/(tabs)/log.js - Uses DataContext with swimmer/stroke lookups                                                                                            
+  - src/constants/index.js - Added deprecation notes                                                                                                            
+  - Various barrel files updated                                                                                                                                
+                                                                                                                                                                
+  Kept for Migration                                                                                                                                            
+                                                                                                                                                                
+  - src/hooks/useEntries.js                                                                                                                                     
+  - src/context/EntriesContext.js       

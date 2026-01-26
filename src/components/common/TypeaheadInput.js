@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -19,67 +19,94 @@ import {
 
 /**
  * Text input with autocomplete dropdown suggestions
- * @param {Object} props - Component props
+ * Supports both string[] and object[] options
+ * @param {Object} props
  * @param {string} props.label - Input field label
  * @param {string} props.value - Current input value
- * @param {Function} props.onChangeText - Text change handler
- * @param {string[]} props.options - Available autocomplete options
+ * @param {Function} props.onChangeText - Text change handler (receives string)
+ * @param {string[]} [props.options] - String autocomplete options
+ * @param {Object[]} [props.objectOptions] - Object autocomplete options
+ * @param {string} [props.valueKey='id'] - Key for object value
+ * @param {string} [props.displayKey='name'] - Key for display text
+ * @param {Function} [props.onSelect] - Selection handler (receives object if objectOptions)
  * @param {string} props.placeholder - Placeholder text
  * @param {number} props.zIndexValue - Z-index for dropdown layering
- * @returns {JSX.Element} The typeahead input component
  */
 export const TypeaheadInput = ({
   label,
   value,
   onChangeText,
-  options,
+  options = [],
+  objectOptions,
+  valueKey = "id",
+  displayKey = "name",
+  onSelect,
   placeholder,
   zIndexValue,
 }) => {
-  // Bool is focused for when the input text field is active (opposite is blurred)
   const [isFocused, setIsFocused] = useState(false);
-  // Track what is displayed on the component
-  // onChangeText callback updates parent 
   const [inputValue, setInputValue] = useState(value);
 
-  // if Value changes update "InputValue"
+  // Normalize options to array of display strings
+  const displayOptions = useMemo(() => {
+    if (objectOptions) {
+      return objectOptions.map((opt) => opt[displayKey] || "");
+    }
+    return options;
+  }, [options, objectOptions, displayKey]);
+
+  // Build lookup map for object options
+  const optionMap = useMemo(() => {
+    if (!objectOptions) return null;
+    const map = {};
+    objectOptions.forEach((opt) => {
+      map[opt[displayKey]?.toLowerCase()] = opt;
+    });
+    return map;
+  }, [objectOptions, displayKey]);
+
   useEffect(() => {
     setInputValue(value);
   }, [value]);
 
   // Filter options based on input
-  // array.filter((element) => condition)
-  const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(inputValue.toLowerCase()),
+  const filteredOptions = displayOptions.filter((option) =>
+    option.toLowerCase().includes(inputValue.toLowerCase())
   );
 
-  // focused = text box is active
-  // Bool showsuggestions, when it's focused and theres input
   const showSuggestions =
     isFocused &&
     inputValue.length > 0 &&
     filteredOptions.length > 0 &&
-    !options.some((opt) => opt.toLowerCase() === inputValue.toLowerCase());
+    !displayOptions.some(
+      (opt) => opt.toLowerCase() === inputValue.toLowerCase()
+    );
 
-  // Show all options when input is empty and focused
-  // Bool show All Options : when it's focused and no input yet
   const showAllOptions = isFocused && inputValue.length === 0;
-
   const isShowingSuggestions = showSuggestions || showAllOptions;
 
   /**
    * Selects an option and closes the dropdown
-   * @param {string} option - Selected option text
+   * @param {string} displayText - Selected display text
    */
-  const handleSelect = (option) => {
-    setInputValue(option);
-    onChangeText(option);
+  const handleSelect = (displayText) => {
+    setInputValue(displayText);
+    onChangeText(displayText);
+
+    // Call onSelect with the full object if using objectOptions
+    if (onSelect && optionMap) {
+      const obj = optionMap[displayText.toLowerCase()];
+      if (obj) {
+        onSelect(obj);
+      }
+    }
+
     setIsFocused(false);
     Keyboard.dismiss();
   };
 
   /**
-   * Updates input value and notifies parent of text change
+   * Updates input value and notifies parent
    * @param {string} text - New input text
    */
   const handleChangeText = (text) => {
@@ -88,18 +115,16 @@ export const TypeaheadInput = ({
   };
 
   /**
-   * Handles input blur with delay to allow suggestion taps
+   * Handles input blur with delay for tap handling
    */
   const handleBlur = () => {
-    // Delay to allow tap on suggestion
     setTimeout(() => setIsFocused(false), 200);
   };
 
   /**
-   * Renders a single suggestion item with optional text highlighting
-   * @param {string} option - Suggestion text
-   * @param {boolean} [isFiltered=false] - Whether to highlight matching text
-   * @returns {JSX.Element} The suggestion item
+   * Renders a single suggestion item
+   * @param {string} option - Display text
+   * @param {boolean} isFiltered - Highlight matching text
    */
   const renderSuggestionItem = (option, isFiltered = false) => (
     <TouchableOpacity
@@ -139,7 +164,6 @@ export const TypeaheadInput = ({
     >
       <Text style={styles.label}>{label}</Text>
       <TextInput
-        // if isFocused use the inputfocused style (short circuit syntax)
         style={[styles.input, isFocused && styles.inputFocused]}
         value={inputValue}
         onChangeText={handleChangeText}
@@ -150,19 +174,15 @@ export const TypeaheadInput = ({
         autoCapitalize="words"
         autoCorrect={false}
       />
-      {/* Short circuit syntax for conditional rendering */}
       {showSuggestions && (
         <View style={styles.suggestions}>
           <ScrollView
             style={styles.suggestionsScroll}
-            // Even when keyboard is open, register taps on other things
-            // By default tapping outside dismissed the keyboard and ignores the tap
             keyboardShouldPersistTaps="always"
-            // scroll is applied only to inner element
             nestedScrollEnabled
           >
             {filteredOptions.map((option) =>
-              renderSuggestionItem(option, true),
+              renderSuggestionItem(option, true)
             )}
           </ScrollView>
         </View>
@@ -174,7 +194,7 @@ export const TypeaheadInput = ({
             keyboardShouldPersistTaps="always"
             nestedScrollEnabled
           >
-            {options.map((option) => renderSuggestionItem(option, false))}
+            {displayOptions.map((option) => renderSuggestionItem(option, false))}
           </ScrollView>
         </View>
       )}

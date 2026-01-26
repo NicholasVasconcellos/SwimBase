@@ -1,4 +1,5 @@
 export { TypeaheadInput } from "./TypeaheadInput";
+export { MultiSelectTypeahead } from "./MultiSelectTypeahead";
 export { Button } from "./Button";
 export { TimeCard } from "./TimeCard";
 

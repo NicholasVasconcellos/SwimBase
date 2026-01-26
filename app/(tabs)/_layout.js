@@ -1,14 +1,13 @@
 import { Tabs } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
 import { colors, typography, spacing, radii } from "../../src/styles/theme";
-import { useEntriesContext } from "../../src/context";
+import { useDataContext } from "../../src/context";
 
 /**
  * Renders a tab label with active/inactive styling
- * @param {Object} props - Component props
+ * @param {Object} props
  * @param {string} props.label - Tab label text
- * @param {boolean} props.focused - Whether tab is currently selected
- * @returns {JSX.Element} The tab label
+ * @param {boolean} props.focused - Whether tab is selected
  */
 const TabIcon = ({ label, focused }) => (
   <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>
@@ -18,9 +17,8 @@ const TabIcon = ({ label, focused }) => (
 
 /**
  * Displays a count badge, hidden when count is zero
- * @param {Object} props - Component props
- * @param {number} props.count - Number to display in badge
- * @returns {JSX.Element|null} The badge or null if count is zero
+ * @param {Object} props
+ * @param {number} props.count - Number to display
  */
 const Badge = ({ count }) => {
   if (count === 0) return null;
@@ -32,11 +30,11 @@ const Badge = ({ count }) => {
 };
 
 /**
- * Main tab navigation layout with New Entry, Log, and My Screen tabs
- * @returns {JSX.Element} The tab navigation component
+ * Main tab navigation layout
  */
 export default function TabLayout() {
-  const { entryCount } = useEntriesContext();
+  const { times } = useDataContext();
+  const timeCount = times?.timeCount || 0;
 
   return (
     <Tabs
@@ -64,10 +62,20 @@ export default function TabLayout() {
           tabBarLabel: ({ focused }) => (
             <View style={styles.logLabelContainer}>
               <TabIcon label="Log" focused={focused} />
-              <Badge count={entryCount} />
+              <Badge count={timeCount} />
             </View>
           ),
           tabBarIcon: () => <Text style={styles.tabIcon}>📋</Text>,
+        }}
+      />
+      <Tabs.Screen
+        name="manage"
+        options={{
+          title: "Manage",
+          tabBarLabel: ({ focused }) => (
+            <TabIcon label="Manage" focused={focused} />
+          ),
+          tabBarIcon: () => <Text style={styles.tabIcon}>👥</Text>,
         }}
       />
       <Tabs.Screen
